@@ -1,0 +1,17 @@
+<launch>
+    <arg name="id" default="0"/>
+    <arg name="position_x" default="0"/>
+    <arg name="position_y" default="0"/>
+
+    <group ns="target_$(arg id)">
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" type="double" value="50.0"/>
+            <param name="tf_prefix" value="target_$(arg id)"/>
+        </node>
+
+        <param name="robot_description" textfile="$(find turtlebot3_description)/urdf/turtlebot3_target.urdf.xacro"/>
+
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+              args="-urdf -model target_$(arg id) -x $(arg position_x) -y $(arg position_y) -z 0.01 -Y 0 -param robot_description"/>
+    </group>
+</launch>
